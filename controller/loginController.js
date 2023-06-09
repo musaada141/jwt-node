@@ -8,17 +8,14 @@ const loginController = {
     };
 
     if (userDetails.password === req.params.password) {
-      jwt.sign(userDetails, process.env.SECRET_KEY, (err, data) => {
+      jwt.sign(userDetails, process.env.SECRET_KEY, { expiresIn: 60 }, (err, data) => {
         if (err) {
           res.json("error");
         }
-        return res.json({
-          token: data,
-          msg: `welcome ${userDetails.username}`,
-        });
+        return res.json(data);
       });
     } else {
-      return res.json({ msg: `Invalid Password` });
+      return res.status(401).json({ msg: `Invalid Password` });
     }
   },
 };
